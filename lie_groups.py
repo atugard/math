@@ -1,7 +1,6 @@
 import numpy as np 
 import math 
 import matplotlib.pyplot as plt 
-import matplotlib.gridspec as gridspec
 from matplotlib.animation import FuncAnimation
 
 x,y = np.meshgrid(np.linspace(-10,10,10), np.linspace(-10,10,10))
@@ -49,7 +48,7 @@ def animate(i):
     strm = ax.streamplot(x, y, u, v, color=u, linewidth=2, cmap='autumn')
     return strm
 
-ani = FuncAnimation(fig, animate, frames = 200, interval=500, blit=False, repeat=True)
+ani = FuncAnimation(fig, animate, frames = 200, interval=50, blit=False, repeat=True)
 plt.show()
 
 ####################################################################
