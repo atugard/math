@@ -3,31 +3,30 @@ import math
 import matplotlib.pyplot as plt 
 from matplotlib.animation import FuncAnimation
 
-x,y = np.meshgrid(np.linspace(-10,10,10), np.linspace(-10,10,10))
 id_m = np.array([[1, 0], 
                  [0, 1]])
 
-def elliptical_matrix(a,b):
+def elliptical_matrix(a:float,b:float):
     return lambda t: math.exp(a*t) * np.array([[math.cos(b*t), -math.sin(b*t)], 
                                                [math.sin(b*t), math.cos(b*t)]])
-def hyperbolic_matrix(a,b):
+def hyperbolic_matrix(a:float,b:float):
     return lambda t: math.exp(a*t) * np.array([[math.cosh(b*t), math.sinh(b*t)], 
                                                [math.sinh(b*t), math.cosh(b*t)]])
-def parabolic_matrix(a,b):
+def parabolic_matrix(a:float,b:float):
     return lambda t: math.exp(a*t) * np.array([[1  , 0], 
                                                [b*t, 1]])
-def scalar_matrix(a,b):
+def scalar_matrix(a:float):
     return lambda t: math.exp(a*t) * np.array(id_m)
 
-def dotEval(m,w):
+def dotEval(m:np.ndarray,w:np.ndarray):
     return lambda t: np.dot(m(t),w)
 
-def morphGrid(t,x,y, matrix):
+def morphGrid(t:float,x:np.ndarray,y:np.ndarray, m:np.ndarray)->list[np.ndarray]:
     new_x = []
     new_y = []
     for (a,b) in zip(x,y):
         for (c,d) in zip (a,b):
-            v = np.dot(matrix(t), np.array([c,d]))
+            v = np.dot(m(t), np.array([c,d]))
             new_x.append(v[0])
             new_y.append(v[1])
     new_x = np.array(new_x).reshape(x.shape)
@@ -36,12 +35,16 @@ def morphGrid(t,x,y, matrix):
 
 ####################################################################
 
+x,y = np.meshgrid(np.linspace(-10,10,10), np.linspace(-10,10,10))
 u,v = morphGrid(0,x,y, parabolic_matrix(1,2))
-fig, ax = plt.subplots()
-strm = ax.streamplot(x, y, u, v, color=u, linewidth=2, cmap='autumn')
-#fig.colorbar(strm.lines)
 
-def animate(i):
+fig, ax = plt.subplots()
+
+strm = ax.streamplot(x, y, u, v, color=u, linewidth=2, cmap='autumn')
+
+fig.colorbar(strm.lines)
+
+def animate(i:float):
     ax.collections = [] # clear lines streamplot
     ax.patches = [] # clear arrowheads streamplot
     u,v = morphGrid(i*.1,x,y, parabolic_matrix(3,1))
