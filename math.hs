@@ -52,21 +52,29 @@ gcdLC :: Int -> Int -> [Int]
 gcdLC x y = _gcdLC $ backTrail x y
 
 --Given a,n find k such that ak = 1 mod n 
+--This implementation is way faster than brute force checking all possible combinations of x n... It'll freeze on high inputs for a minute on the command line, when this one is done in a flash. I think it might even be constant time.
 inverseModuloN :: Int -> Int -> Maybe Int  
 inverseModuloN _ 0 = Nothing 
-inverseModuloN 1 n = Just 1 
-inverseModuloN a n
-  | gcd a n /= 1 = Nothing 
-  | otherwise    = let d  = gcdLC a n 
+inverseModuloN x n
+  | n < 0        = Nothing 
+  | x == 1       = Just 1 
+  | gcd x n /= 1 = Nothing 
+  | otherwise    = let d  = gcdLC x n 
                     in if d !! 1 == n 
                           then Just $ (d !! 2) `mod` n 
                           else Just $ (d !! 0) `mod` n
 
-_totient :: Int -> Int -> Int -> Int 
-_totient total a n 
-  | a == n                         = total 
-  | isNothing $ inverseModuloN a n = _totient total (a+1) n 
-  | otherwise                      = _totient (total+1) (a+1) n
+_totient1 :: Int -> Int -> Int -> Int 
+_totient1 total a n 
+  | a == n                          = total 
+  | isNothing $ inverseModuloN a n = _totient1 total (a+1) n 
+  | otherwise                       = _totient1 (total+1) (a+1) n
+
+_totient2 :: Int -> Int -> Int -> Int 
+_totient2 total a n 
+  | a == n       = total 
+  | gcd a n == 1 = _totient2 (total+1) (a+1) n 
+  | otherwise    = _totient2 total (a+1) n 
 
 --Counts number of coprime elements 
 totient :: Int -> Int 
@@ -74,8 +82,11 @@ totient 0 = 1
 totient 1 = 1 
 totient n 
   | n < 0     = error $ "totient takes one non negative argument of type Integer. You gave: " ++ (show n)
-  | otherwise =  _totient 0 0 n
+  | otherwise =  _totient2 0 0 n
 
---This gives us a way to check for primes 
-totientPrime :: Int -> Bool 
-totientPrime n = totient n == n - 1 
+_derivative :: (Fractional a) => a -> (a -> a) -> (a -> a)  
+_derivative h f x = (f (x+h) - f x) / h 
+
+derivative :: (Fractional a) => (a -> a) -> (a -> a)
+derivative = _derivative 0.000000001
+
