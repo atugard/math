@@ -47,12 +47,11 @@ _gcdLC (x:xs)
                         then _gcdLC ([(v1*v2)+u1,  x1,      v1*u2, x2]: tail xs)
                         else _gcdLC ([u1*u2     ,  x2, (u1*v2)+v1, y1]: tail xs)
 
---Returns a list [u,x,v,y] such that g = gcd x y and u*x + v*y = g
+--Returns a list [u,x,v,y] such that g = gcd x y and u*x + v*y = g, as long as one doesn't divide the other.
 gcdLC :: Int -> Int -> [Int]
 gcdLC x y = _gcdLC $ backTrail x y
 
 --Given a,n find k such that ak = 1 mod n 
---This implementation is way faster than brute force checking all possible combinations of x n... It'll freeze on high inputs for a minute on the command line, when this one is done in a flash. I think it might even be constant time.
 inverseModuloN :: Int -> Int -> Maybe Int  
 inverseModuloN _ 0 = Nothing 
 inverseModuloN x n
@@ -76,6 +75,8 @@ _totient2 total a n
   | gcd a n == 1 = _totient2 (total+1) (a+1) n 
   | otherwise    = _totient2 total (a+1) n 
 
+
+--tot(n) = n product_{p divides n} (1 - 1/p)... could use this to implement something faster.
 --Counts number of coprime elements 
 totient :: Int -> Int 
 totient 0 = 1 
