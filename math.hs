@@ -65,14 +65,13 @@ inverseModuloN a n
                        else if d !! 1 == n 
                                then Just $ (d !! 2) `mod` n 
                                else Just $ (d !! 0) `mod` n
+
 --Counts number of coprime elements 
 _totient :: Int -> Int -> Int -> Int 
 _totient total a n 
-  | a == n = total 
-  | otherwise = let d = inverseModuloN a n 
-                 in if isNothing d 
-                       then _totient total (a+1) n 
-                       else _totient (total+1) (a+1) n
+  | a == n                         = total 
+  | isNothing $ inverseModuloN a n = _totient total (a+1) n 
+  | otherwise                      = _totient (total+1) (a+1) n
 
 totient :: Int -> Int 
 totient 0 = 1 
