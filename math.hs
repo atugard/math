@@ -76,7 +76,8 @@ _totient2 total a n
   | otherwise    = _totient2 total (a+1) n 
 
 
---tot(n) = n product_{p divides n} (1 - 1/p)... could use this to implement something faster.
+--tot(n) = n product_{p divides n} (1 - 1/p)... could use this to implement something faster
+--Use Sieve of Atkin to get primes...
 --Counts number of coprime elements 
 totient :: Int -> Int 
 totient 0 = 1 
