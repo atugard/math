@@ -66,13 +66,13 @@ inverseModuloN a n
                                then Just $ (d !! 2) `mod` n 
                                else Just $ (d !! 0) `mod` n
 
---Counts number of coprime elements 
 _totient :: Int -> Int -> Int -> Int 
 _totient total a n 
   | a == n                         = total 
   | isNothing $ inverseModuloN a n = _totient total (a+1) n 
   | otherwise                      = _totient (total+1) (a+1) n
 
+--Counts number of coprime elements 
 totient :: Int -> Int 
 totient 0 = 1 
 totient 1 = 1 
@@ -80,3 +80,6 @@ totient n
   | n < 0     = error $ "totient takes one non negative argument of type Integer. You gave: " ++ (show n)
   | otherwise =  _totient 0 0 n
 
+--This gives us a way to check for primes 
+totientPrime :: Int -> Bool 
+totientPrime n = totient n == n - 1 
