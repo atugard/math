@@ -51,7 +51,7 @@ _gcdLC (x:xs)
 gcdLC :: Int -> Int -> (Int, [Int])
 gcdLC x y = (gcd x y, _gcdLC $ backTrail x y)
 
---Given a,n find k such that ak=n 
+--Given a,n find k such that ak = 1 mod n 
 inverseModuloN :: Int -> Int -> Maybe Int  
 inverseModuloN _ 0 = Nothing 
 inverseModuloN a n 
