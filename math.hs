@@ -54,13 +54,13 @@ gcdLC x y = (gcd x y, _gcdLC $ backTrail x y)
 --Given a,n find k such that ak = 1 mod n 
 inverseModuloN :: Int -> Int -> Maybe Int  
 inverseModuloN _ 0 = Nothing 
-inverseModuloN a n 
+inverseModuloN 1 n = Just 1 
+inverseModuloN a n
   | a > n     = inverseModuloN (a `mod` n) n  
-  | a == 1    = Just 1 
   | otherwise = let _d = gcdLC a n
                     g  = fst _d 
                     d  = snd _d
-                 in if g /= 1  --waste to do all of that work and then finally check this condition... I should rewrite this...
+                 in if g /= 1
                        then Nothing 
                        else if d !! 1 == n 
                                then Just $ (d !! 2) `mod` n 
