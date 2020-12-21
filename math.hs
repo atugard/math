@@ -9,7 +9,7 @@ _gcdTrail x y res
                     r = x - q*y
                  in _gcdTrail y r ([y,q,r]:res)
 
---returns a list of remainder tuples from gcd algorithm
+--returns a list of tuples of the form [r_{n+1}, q_{n+1}, r_{n+2}], where r_n = r_{n+1} q_{n+1} + r_{n+2}
 gcdTrail :: Int -> Int -> [[Int]]
 gcdTrail x y 
   | x < y     = _gcdTrail y x [[y,0,x]] 
@@ -44,7 +44,7 @@ _gcdLC (x:xs)
                         then _gcdLC ([(v1*v2)+u1,  x1,      v1*u2, x2]: tail xs)
                         else _gcdLC ([u1*u2     ,  x2, (u1*v2)+v1, y1]: tail xs)
 
---Returns a pair (g, [u,x,v,y]) such that g = gcd x y and u*v + v*y = g
+--Returns a pair (g, [u,x,v,y]) such that g = gcd x y and u*x + v*y = g
 gcdLC :: Int -> Int -> (Int, [Int])
 gcdLC x y = (gcd x y, _gcdLC $ backTrail x y)
 
