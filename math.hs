@@ -9,7 +9,7 @@ _gcdTrail x y res
                     r = x - q*y
                  in _gcdTrail y r ([y,q,r]:res)
 
---returns a list of tuples of the form [r_{n+1}, q_{n+1}, r_{n+2}], where r_n = r_{n+1} q_{n+1} + r_{n+2}
+--returns an array of arrays of the form [r_{n+1}, q_{n+1}, r_{n+2}], where r_n = r_{n+1} q_{n+1} + r_{n+2}
 gcdTrail :: Int -> Int -> [[Int]]
 gcdTrail x y 
   | x < y     = _gcdTrail y x [[y,0,x]] 
