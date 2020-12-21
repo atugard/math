@@ -47,24 +47,20 @@ _gcdLC (x:xs)
                         then _gcdLC ([(v1*v2)+u1,  x1,      v1*u2, x2]: tail xs)
                         else _gcdLC ([u1*u2     ,  x2, (u1*v2)+v1, y1]: tail xs)
 
---Returns a pair (g, [u,x,v,y]) such that g = gcd x y and u*x + v*y = g
-gcdLC :: Int -> Int -> (Int, [Int])
-gcdLC x y = (gcd x y, _gcdLC $ backTrail x y)
+--Returns a list [u,x,v,y] such that g = gcd x y and u*x + v*y = g
+gcdLC :: Int -> Int -> [Int]
+gcdLC x y = _gcdLC $ backTrail x y
 
 --Given a,n find k such that ak = 1 mod n 
 inverseModuloN :: Int -> Int -> Maybe Int  
 inverseModuloN _ 0 = Nothing 
 inverseModuloN 1 n = Just 1 
 inverseModuloN a n
-  | a > n     = inverseModuloN (a `mod` n) n  
-  | otherwise = let _d = gcdLC a n
-                    g  = fst _d 
-                    d  = snd _d
-                 in if g /= 1
-                       then Nothing 
-                       else if d !! 1 == n 
-                               then Just $ (d !! 2) `mod` n 
-                               else Just $ (d !! 0) `mod` n
+  | gcd a n /= 1 = Nothing 
+  | otherwise    = let d  = gcdLC a n 
+                    in if d !! 1 == n 
+                          then Just $ (d !! 2) `mod` n 
+                          else Just $ (d !! 0) `mod` n
 
 _totient :: Int -> Int -> Int -> Int 
 _totient total a n 
