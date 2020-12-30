@@ -36,7 +36,7 @@ def morphGrid(t:float,x:np.ndarray,y:np.ndarray, m:np.ndarray)->list[np.ndarray]
 ####################################################################
 
 x,y = np.meshgrid(np.linspace(-10,10,10), np.linspace(-10,10,10))
-u,v = morphGrid(0,x,y, parabolic_matrix(1,2))
+u,v = morphGrid(0,x,y, elliptical_matrix(1,2))
 
 fig, ax = plt.subplots()
 
@@ -47,7 +47,7 @@ fig.colorbar(strm.lines)
 def animate(i:float):
     ax.collections = [] # clear lines streamplot
     ax.patches = [] # clear arrowheads streamplot
-    u,v = morphGrid(i*.1,x,y, parabolic_matrix(3,1))
+    u,v = morphGrid(i*.1,x,y, elliptical_matrix(3,1))
     strm = ax.streamplot(x, y, u, v, color=u, linewidth=2, cmap='autumn')
     return strm
 
